@@ -1,1 +1,20 @@
 # empty
+apiVersion: tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: BUILD
+spec:
+  triggers:
+  - binding:
+      name: pipeline-BUILD
+    template:
+      name: tt-common
+---
+apiVersion: tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: pipeline-BUILD
+spec:
+  params:
+  - name: script
+    value: ./scripts/pipeline-BUILD.sh
