@@ -6,7 +6,7 @@ metadata:
 spec:
   triggers:
   - binding:
-      name: pipeline-BUILD
+      name: pipeline-build
     template:
       name: tt-common
 ---
