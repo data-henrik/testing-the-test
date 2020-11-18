@@ -84,4 +84,6 @@ spec:
       value: $(params.script)
     command: ["/bin/bash", "-c"]
     args:
-    - env
+    - |
+      env
+      git diff --name-only $GIT_COMMIT $GIT_PREVIOUS_COMMIT | grep / | awk 'BEGIN {FS="/"} {print $1}' | uniq
