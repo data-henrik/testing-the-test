@@ -54,6 +54,8 @@ spec:
       params:
       - name: script
         value: $(params.script)
+      - name: myenv
+        value: $(params.gitrepositoryurl)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
