@@ -126,9 +126,9 @@ spec:
       image: ibmcom/pipeline-base-image:2.9
     envFrom:
     - configMapRef:
-        name: environment-properties
+      name: environment-properties
     - secretRef:
-        name: secure-properties     
+       name: secure-properties     
     env:
     - name: script
       value: $(params.script)
