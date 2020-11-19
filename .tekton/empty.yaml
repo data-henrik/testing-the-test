@@ -40,7 +40,7 @@ metadata:
 spec:
   params:
   - name: script
-  
+  - name: gitrepositoryurl
   resourcetemplates:
   - apiVersion: tekton.dev/v1beta1
     kind: PipelineRun
