@@ -95,7 +95,6 @@ spec:
     mountPath: /working   
   params:
   - name: script
-  - name: gitrepositoryurl
   steps:
   - name: execute-script
     image: ibmcom/pipeline-base-image:2.9
