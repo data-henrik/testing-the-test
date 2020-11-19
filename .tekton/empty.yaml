@@ -40,6 +40,7 @@ metadata:
 spec:
   params:
   - name: script
+  
   resourcetemplates:
   - apiVersion: tekton.dev/v1beta1
     kind: PipelineRun
@@ -66,6 +67,7 @@ spec:
   - name: pipeline-workspace
   params:
   - name: script
+  - name: gitrepositoryurl
   tasks:
   - name: script
     when:
@@ -91,6 +93,7 @@ spec:
     mountPath: /working   
   params:
   - name: script
+  - name: gitrepositoryurl
   steps:
   - name: execute-script
     image: ibmcom/pipeline-base-image:2.9
