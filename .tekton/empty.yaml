@@ -124,10 +124,12 @@ spec:
       echo $changed_directories | tee $(results.changed_directories.path)
   - name: print-changed-path
     image: bash:latest
-    params:
-      - name: changed_directories
-        value: "$(results.changed_directories)"
+    env:
+    - name: changed_directories
+      value: $(results.changed_directories)
+
     script: |
       #!/usr/bin/env bash
+      env
       echo "This is another step. Changed directories:"
-      echo $params.changed_directories
+      echo $changed_directories
