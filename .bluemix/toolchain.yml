@@ -51,6 +51,6 @@ form:
       image-name: 'secure-file-storage'
       target-cluster-namespace: secure-file-storage
       target-resource-group: 'default'
-      branch-name: $env.branch || 'master'
+      branch-name: $env.branch || 'main'
     schema:
       $ref: deploy.json
