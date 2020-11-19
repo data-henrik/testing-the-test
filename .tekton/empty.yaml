@@ -132,4 +132,4 @@ spec:
       env
       echo "This is another step. Changed directories:"
       echo $changed_directories
-      ls -lr /tekton/results
+      ls -lR /tekton/results
