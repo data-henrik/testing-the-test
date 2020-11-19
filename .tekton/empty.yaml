@@ -120,3 +120,4 @@ spec:
         git clone -q -b $GIT_BRANCH $GIT_REPO .
       fi
       export changed_directories=$(git log --format= -n 1 --name-only | grep / | awk 'BEGIN {FS="/"} {print $1}')
+      echo "changed_directories=$changed_directories"
