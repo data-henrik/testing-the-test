@@ -79,10 +79,10 @@ apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: detect-change-task
-resources:
-  outputs:
-    name: changed_directories
 spec:
+  results:
+    - name: changed_directories
+      description: list of changed directories
   workspaces:
   - name: task-workspace 
     mountPath: /working   
@@ -119,5 +119,12 @@ spec:
       else
         git clone -q -b $GIT_BRANCH $GIT_REPO .
       fi
-      export changed_directories=$(git log --format= -n 1 --name-only | grep / | awk 'BEGIN {FS="/"} {print $1}')
-      echo "changed_directories=$changed_directories"
+      changed_directories=$(git log --format= -n 1 --name-only | grep / | awk 'BEGIN {FS="/"} {print $1}')
+      echo "changed_directories:\n$changed_directories"
+      echo $changed_directories | tee $(results.changed_directories.path)
+  - name: print-changed-path
+      image: bash:latest
+      script: |
+        #!/usr/bin/env bash
+        echo "This is another step. Changed directories:"
+        echo $(results.current-date-human-readable.path
