@@ -73,12 +73,15 @@ spec:
     - name: script
       value: $(params.script)
     taskRef:
-      name: gasket
+      name: detect-change-task
 ---
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: gasket
+  name: detect-change-task
+resources:
+  outputs:
+    name: changed_directories
 spec:
   workspaces:
   - name: task-workspace 
@@ -99,8 +102,6 @@ spec:
     command: ["/bin/bash", "-c"]
     args:
     - |
-      env
-
       # verify all the required variables are set
       set -u
       for e in GIT_REPO GIT_BRANCH REGISTRY_REGION_ID REGISTRY_NAMESPACE  IMAGE_NAME TARGET_REGION_ID TARGET_RESOURCE_GROUP COS_PLAN APP_ID_PLAN CLOUDANT_PLAN script; do
@@ -118,4 +119,4 @@ spec:
       else
         git clone -q -b $GIT_BRANCH $GIT_REPO .
       fi
-      git log --format= -n 1 --name-only | grep / | awk 'BEGIN {FS="/"} {print $1}'
+      export changed_directories=$(git log --format= -n 1 --name-only | grep / | awk 'BEGIN {FS="/"} {print $1}')
