@@ -100,7 +100,3 @@ spec:
     args:
     - |
       env
-      cd testing-the-test
-      changes=$(git log --format= -n 1 --name-only)
-      echo "Changes:"
-      echo $changes
