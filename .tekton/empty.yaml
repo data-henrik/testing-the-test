@@ -52,6 +52,8 @@ spec:
       - name: pipeline-workspace
         emptyDir: {}
       params:
+      - name: gitrepositoryurl
+        value: $(params.gitrepositoryurl)
       - name: script
         value: $(params.script)
 ---
@@ -66,6 +68,10 @@ spec:
   - name: script
   tasks:
   - name: script
+    when:
+    - input: "$(params.gitrepository)"
+      operator: in
+      values: [ "testing" ]
     workspaces:
     - name: task-workspace
       workspace: pipeline-workspace
