@@ -127,4 +127,4 @@ spec:
     script: |
       #!/usr/bin/env bash
       echo "This is another step. Changed directories:"
-      echo ${results.current-date-human-readable.path}
+      echo $current-date-human-readable
