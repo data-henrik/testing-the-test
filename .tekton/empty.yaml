@@ -118,5 +118,5 @@ spec:
       else
         git clone -q -b $GIT_BRANCH $GIT_REPO .
       fi
-      cd testing-the-test
+      #cd testing-the-test
       git log --format= -n 1 --name-only
