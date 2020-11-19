@@ -127,4 +127,4 @@ spec:
     script: |
       #!/usr/bin/env bash
       echo "This is another step. Changed directories:"
-      echo $current-date-human-readable
+      echo $changed_directories
