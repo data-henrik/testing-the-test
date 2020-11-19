@@ -40,7 +40,6 @@ metadata:
 spec:
   params:
   - name: script
-  - name: gitrepositoryurl
   resourcetemplates:
   - apiVersion: tekton.dev/v1beta1
     kind: PipelineRun
@@ -53,8 +52,6 @@ spec:
       - name: pipeline-workspace
         emptyDir: {}
       params:
-      - name: gitrepositoryurl
-        value: $(params.gitrepositoryurl)
       - name: script
         value: $(params.script)
 ---
@@ -67,21 +64,14 @@ spec:
   - name: pipeline-workspace
   params:
   - name: script
-  - name: gitrepositoryurl
   tasks:
   - name: script
-    when:
-    - input: "$(params.gitrepositoryurl)"
-      operator: notin
-      values: [ "testing" ]
     workspaces:
     - name: task-workspace
       workspace: pipeline-workspace
     params:
     - name: script
       value: $(params.script)
-    - name: gitrepositoryurl
-      value: $(params.gitrepositoryurl)
     taskRef:
       name: gasket
 ---
