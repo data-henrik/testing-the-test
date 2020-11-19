@@ -126,7 +126,7 @@ spec:
     image: bash:latest
     env:
     - name: changed_directories
-      value: $(tasks.detect-change-task.results.changed_directories)
+      value: "$(results.changed_directories)"
     script: |
       #!/usr/bin/env bash
       env
