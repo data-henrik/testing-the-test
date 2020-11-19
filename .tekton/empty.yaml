@@ -123,17 +123,8 @@ spec:
       echo "changed_directories:\n$changed_directories"
       echo $changed_directories | tee $(results.changed_directories.path)
   - name: print-changed-path
-    image: ibmcom/pipeline-base-image:2.9
-    envFrom:
-    - configMapRef:
-      name: environment-properties
-    - secretRef:
-       name: secure-properties     
-    env:
-    - name: script
-      value: $(params.script)
-    command: ["/bin/bash", "-c"]
-    args:
-    - |
+    image: bash:latest
+    script: |
+      #!/usr/bin/env bash
       echo "This is another step. Changed directories:"
       echo $(results.current-date-human-readable.path
