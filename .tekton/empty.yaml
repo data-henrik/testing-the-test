@@ -123,7 +123,7 @@ spec:
       echo "changed_directories:\n$changed_directories"
       echo $changed_directories | tee $(results.changed_directories.path)
   - name: print-changed-path
-      image: ibmcom/pipeline-base-image:2.9
+    image: ibmcom/pipeline-base-image:2.9
     envFrom:
     - configMapRef:
       name: environment-properties
