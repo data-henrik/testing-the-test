@@ -50,26 +50,8 @@ triggers:
   type: git
   service: repo
 - eventListener: BUILD
-  name: BUILD
+  name: build
   type: manual
 - eventListener: DEPLOY
-  name: DEPLOY
-  type: manual
-- eventListener: BUILD-DEPLOY-two-task
-  name: BUILD-DEPLOY-two-task
-  type: manual
-- eventListener: BUILD-DEPLOY-one-task
-  name: BUILD-DEPLOY-one-task
-  type: manual
-- eventListener: ROTATE_STORAGE_CREDENTIALS
-  name: ROTATE_STORAGE_CREDENTIALS
-  type: manual
-- eventListener: ROTATE_APPID_CREDENTIALS
-  name: ROTATE_APPID_CREDENTIALS
-  type: manual
-- eventListener: ROTATE_REGISTRY_CREDENTIALS
-  name: ROTATE_REGISTRY_CREDENTIALS
-  type: manual
-- eventListener: UNINSTALL
-  name: UNINSTALL
+  name: deploy
   type: manual
