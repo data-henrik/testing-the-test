@@ -80,6 +80,8 @@ spec:
     params:
     - name: script
       value: $(params.script)
+    - name: gitrepositoryurl
+      value: $(params.gitrepositoryurl)
     taskRef:
       name: gasket
 ---
