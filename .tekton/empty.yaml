@@ -100,5 +100,7 @@ spec:
     args:
     - |
       env
-      echo "GIT_COMMIT=$GIT_COMMIT"
-      git version
+      cd testing-the-test
+      changes=$(git log --format= -n 1 --name-only)
+      echo "Changes:"
+      echo $changes
