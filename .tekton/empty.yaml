@@ -71,7 +71,7 @@ spec:
   tasks:
   - name: script
     when:
-    - input: "$(params.gitrepository)"
+    - input: "$(params.gitrepositoryurl)"
       operator: in
       values: [ "testing" ]
     workspaces:
