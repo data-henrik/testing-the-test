@@ -78,6 +78,9 @@ spec:
     workspaces:
     - name: task-workspace
       workspace: pipeline-workspace
+    params:
+    -name: changed_directories
+     value: "$(tasks.detect-change-task.execute-script.results.changed_directories.path)"
     taskRef:
       name: print-changed-paths
 ---
@@ -142,10 +145,9 @@ spec:
     image: bash:latest
     env:
     - name: changed_directories
-      value: "$(tasks.detect-change-task.execute-script.results.changed_directories.path)"
+      value: $(params.changed_directories)
     script: |
       #!/usr/bin/env bash
       env
       echo "This is another step. Changed directories:"
       echo $changed_directories
-      cat /tekton/results/changed_directories
