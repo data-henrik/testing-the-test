@@ -79,8 +79,8 @@ spec:
     - name: task-workspace
       workspace: pipeline-workspace
     params:
-    - name: changed_directories
-      value: "$(tasks.detect-change-task.execute-script.results.changed_directories.path)"
+    - name: changeddirectories
+      value: "$(tasks.detect-change-task.results.changed_directories.path)"
     taskRef:
       name: print-changed-paths
 ---
@@ -144,10 +144,10 @@ spec:
   - name: print-changed-paths
     image: bash:latest
     env:
-    - name: changed_directories
-      value: $(params.changed_directories)
+    - name: changeddirectories
+      value: $(params.changeddirectories)
     script: |
       #!/usr/bin/env bash
       env
       echo "This is another step. Changed directories:"
-      echo $changed_directories
+      echo $changeddirectories
