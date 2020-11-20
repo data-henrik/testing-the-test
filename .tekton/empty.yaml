@@ -13,10 +13,10 @@ spec:
     - name: namespace
       description: The namespace to create the resources
   triggers:
-  - binding:
-      name: pipeline-build
-    template:
-      name: tt-common
+    - binding:
+        name: pipeline-build
+      template:
+        name: tt-common
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
@@ -24,14 +24,14 @@ metadata:
   name: pipeline-build
 spec:
   params:
-  - name: gitrevision
-    value: $(body.head_commit.id)
-  - name: namespace
-    value: getting-started
-  - name: gitrepositoryurl
-    value: "https://github.com/$(body.repository.full_name)"
-  - name: script
-    value: ./scripts/pipeline-BUILD.sh
+    - name: gitrevision
+      value: $(body.head_commit.id)
+    - name: namespace
+      value: getting-started
+    - name: gitrepositoryurl
+      value: "https://github.com/$(body.repository.full_name)"
+    - name: script
+      value: ./scripts/pipeline-BUILD.sh
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerTemplate
@@ -39,21 +39,21 @@ metadata:
   name: tt-common
 spec:
   params:
-  - name: script
+    - name: script
   resourcetemplates:
-  - apiVersion: tekton.dev/v1beta1
-    kind: PipelineRun
-    metadata:
-      name: pipelinerun-$(uid)
-    spec:
-      pipelineRef:
-        name: pipeline-input-parameter-variable
-      workspaces:
-      - name: pipeline-workspace
-        emptyDir: {}
-      params:
-      - name: script
-        value: $(params.script)
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        name: pipelinerun-$(uid)
+      spec:
+        pipelineRef:
+          name: pipeline-input-parameter-variable
+        workspaces:
+          - name: pipeline-workspace
+            emptyDir: {}
+        params:
+          - name: script
+            value: $(params.script)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
@@ -61,28 +61,29 @@ metadata:
   name: pipeline-input-parameter-variable
 spec:
   workspaces:
-  - name: pipeline-workspace
+    - name: pipeline-workspace
   params:
-  - name: script
-  tasks:
-  - name: script
-    workspaces:
-    - name: task-workspace
-      workspace: pipeline-workspace
-    params:
     - name: script
-      value: $(params.script)
-    taskRef:
-      name: detect-change-task
-  - name: test-output
-    workspaces:
-    - name: task-workspace
-      workspace: pipeline-workspace
-    params:
-    - name: changeddirectories
-      value: "$(tasks.detect-change-task.results.changed_directories.path)"
-    taskRef:
-      name: print-changed-paths
+  tasks:
+    - name: script
+      workspaces:
+        - name: task-workspace
+          workspace: pipeline-workspace
+      params:
+        - name: script
+          value: $(params.script)
+      taskRef:
+        name: detect-change-task
+    - name: test-output
+      runAfter: 
+      workspaces:
+        - name: task-workspace
+          workspace: pipeline-workspace
+      params:
+        - name: changeddirectories
+          value: "$(tasks.script.results.changed_directories.path)"
+      taskRef:
+        name: print-changed-paths
 ---
 apiVersion: tekton.dev/v1beta1
 kind: Task
@@ -93,44 +94,44 @@ spec:
     - name: changed_directories
       description: list of changed directories
   workspaces:
-  - name: task-workspace 
-    mountPath: /working   
+    - name: task-workspace
+      mountPath: /working
   params:
-  - name: script
-  steps:
-  - name: execute-script
-    image: ibmcom/pipeline-base-image:2.9
-    envFrom:
-    - configMapRef:
-        name: environment-properties
-    - secretRef:
-        name: secure-properties     
-    env:
     - name: script
-      value: $(params.script)
-    command: ["/bin/bash", "-c"]
-    args:
-    - |
-      # verify all the required variables are set
-      set -u
-      for e in GIT_REPO GIT_BRANCH REGISTRY_REGION_ID REGISTRY_NAMESPACE  IMAGE_NAME TARGET_REGION_ID TARGET_RESOURCE_GROUP COS_PLAN APP_ID_PLAN CLOUDANT_PLAN script; do
-        eval "echo $e="'$'$e
-      done
-      set +u
-      cd /working
-      # Builder type: Container Registry, initializes this default
-      export ARCHIVE_DIR=.
-      # Builder type: Kubernetes expects the ibmcloud cli to be connected to the cluster and the
-      # environment exported below.  The ibmcloud cli region could be initialized to the toolchain
-      # region instead of the kubernets cluster region
-      if [ -z $GIT_BRANCH ]; then
-        git clone -q $GIT_REPO .
-      else
-        git clone -q -b $GIT_BRANCH $GIT_REPO .
-      fi
-      changed_directories=$(git log --format= -n 1 --name-only | grep / | awk 'BEGIN {FS="/"} {print $1}')
-      echo "changed_directories:\n$changed_directories"
-      echo $changed_directories | tee $(results.changed_directories.path)
+  steps:
+    - name: execute-script
+      image: ibmcom/pipeline-base-image:2.9
+      envFrom:
+        - configMapRef:
+            name: environment-properties
+        - secretRef:
+            name: secure-properties
+      env:
+        - name: script
+          value: $(params.script)
+      command: ["/bin/bash", "-c"]
+      args:
+        - |
+          # verify all the required variables are set
+          set -u
+          for e in GIT_REPO GIT_BRANCH REGISTRY_REGION_ID REGISTRY_NAMESPACE  IMAGE_NAME TARGET_REGION_ID TARGET_RESOURCE_GROUP COS_PLAN APP_ID_PLAN CLOUDANT_PLAN script; do
+            eval "echo $e="'$'$e
+          done
+          set +u
+          cd /working
+          # Builder type: Container Registry, initializes this default
+          export ARCHIVE_DIR=.
+          # Builder type: Kubernetes expects the ibmcloud cli to be connected to the cluster and the
+          # environment exported below.  The ibmcloud cli region could be initialized to the toolchain
+          # region instead of the kubernets cluster region
+          if [ -z $GIT_BRANCH ]; then
+            git clone -q $GIT_REPO .
+          else
+            git clone -q -b $GIT_BRANCH $GIT_REPO .
+          fi
+          changed_directories=$(git log --format= -n 1 --name-only | grep / | awk 'BEGIN {FS="/"} {print $1}')
+          echo "changed_directories:\n$changed_directories"
+          echo $changed_directories | tee $(results.changed_directories.path)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: Task
@@ -138,16 +139,16 @@ metadata:
   name: print-changed-paths
 spec:
   workspaces:
-  - name: task-workspace 
-    mountPath: /working   
+    - name: task-workspace
+      mountPath: /working
   steps:
-  - name: print-changed-paths
-    image: bash:latest
-    env:
-    - name: changeddirectories
-      value: $(params.changeddirectories)
-    script: |
-      #!/usr/bin/env bash
-      env
-      echo "This is another step. Changed directories:"
-      echo $changeddirectories
+    - name: print-changed-paths
+      image: bash:latest
+      env:
+        - name: changeddirectories
+          value: $(params.changeddirectories)
+      script: |
+        #!/usr/bin/env bash
+        env
+        echo "This is another step. Changed directories:"
+        echo $changeddirectories
