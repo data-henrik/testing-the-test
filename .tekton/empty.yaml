@@ -141,6 +141,8 @@ spec:
   workspaces:
     - name: task-workspace
       mountPath: /working
+  params:
+  - name: changeddirectories
   steps:
     - name: print-changed-paths
       image: bash:latest
