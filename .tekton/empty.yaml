@@ -128,6 +128,7 @@ spec:
       changed_directories=$(git log --format= -n 1 --name-only | grep / | awk 'BEGIN {FS="/"} {print $1}')
       echo "changed_directories:\n$changed_directories"
       echo $changed_directories | tee $(results.changed_directories.path)
+---
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
