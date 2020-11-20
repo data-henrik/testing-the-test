@@ -81,7 +81,7 @@ spec:
           workspace: pipeline-workspace
       params:
         - name: changeddirectories
-          value: "$(tasks.script.results.changed_directories.path)"
+          value: "$(tasks.script.results.changed_directories)"
       taskRef:
         name: print-changed-paths
 ---
