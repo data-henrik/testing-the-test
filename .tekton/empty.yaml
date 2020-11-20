@@ -74,6 +74,12 @@ spec:
       value: $(params.script)
     taskRef:
       name: detect-change-task
+  - name: test-output
+    workspaces:
+    - name: task-workspace
+      workspace: pipeline-workspace
+    taskRef:
+      name: print-changed-paths
 ---
 apiVersion: tekton.dev/v1beta1
 kind: Task
@@ -122,11 +128,20 @@ spec:
       changed_directories=$(git log --format= -n 1 --name-only | grep / | awk 'BEGIN {FS="/"} {print $1}')
       echo "changed_directories:\n$changed_directories"
       echo $changed_directories | tee $(results.changed_directories.path)
-  - name: print-changed-path
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: print-changed-paths
+spec:
+  workspaces:
+  - name: task-workspace 
+    mountPath: /working   
+  steps:
+  - name: print-changed-paths
     image: bash:latest
     env:
     - name: changed_directories
-      value: "$(results.changed_directories)"
+      value: "$(tasks.detect-change-task.execute-script.results.changed_directories.path)"
     script: |
       #!/usr/bin/env bash
       env
