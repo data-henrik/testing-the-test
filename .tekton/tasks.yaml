@@ -43,7 +43,7 @@ spec:
           else
             git clone -q -b $GIT_BRANCH $GIT_REPO .
           fi
-          changed_directories=$(git log --format= -n 1 --name-only | grep / | awk 'BEGIN {FS="/"} {print $1}')
+          changed_directories=$(git log --format= -n 1 --name-only | grep / | awk 'BEGIN {FS="/"} {print $1}' | uniq)
           echo "changed_directories:\n$changed_directories"
           echo $changed_directories | tee $(results.changed_directories.path)
 ---
