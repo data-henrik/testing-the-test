@@ -31,12 +31,6 @@ spec:
       command: ["/bin/bash", "-c"]
       args:
         - |
-          # verify all the required variables are set
-          set -u
-          for e in GIT_REPO GIT_BRANCH REGISTRY_REGION_ID REGISTRY_NAMESPACE  IMAGE_NAME TARGET_REGION_ID TARGET_RESOURCE_GROUP COS_PLAN APP_ID_PLAN CLOUDANT_PLAN; do
-            eval "echo $e="'$'$e
-          done
-          set +u
           cd /working
           # Builder type: Container Registry, initializes this default
           export ARCHIVE_DIR=.
@@ -50,12 +44,12 @@ spec:
           fi
           changed_directories=$(git log --format= -n 1 --name-only | grep / | awk 'BEGIN {FS="/"} {print $1}' | uniq)
           echo "changed_directories:\n$changed_directories"
-          if [[ " ${changed_directories[@]} " =~ " ${toolchaindir} " ]]; then
+          if [[ " ${changed_directories[@]} " =~ "${toolchaindir}" ]]; then
             printf true | tee $(results.is_toolchain.path)
           else
             printf false | tee $(results.is_toolchain.path)
           fi
-          if [[ " ${changed_directories[@]} " =~ " ${appdir} " ]]; then
+          if [[ " ${changed_directories[@]} " =~ "${appdir}" ]]; then
             printf true | tee $(results.is_app.path)
           else
             printf false | tee $(results.is_app.path)
