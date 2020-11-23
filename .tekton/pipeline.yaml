@@ -22,7 +22,7 @@ spec:
       when: 
       - input: ".tekton"
         operator: notin
-        values: ["$(tasks.script.results.changed_directories)"]
+        values: ["$(tasks.script.results.changed_directories[*])"]
       workspaces:
         - name: task-workspace
           workspace: pipeline-workspace
