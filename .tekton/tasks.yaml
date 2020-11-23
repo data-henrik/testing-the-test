@@ -67,4 +67,8 @@ spec:
         #!/usr/bin/env bash
         env
         echo "This is another step. Changed directories:"
-        echo $changeddirectories
+        echo "Directories: $changeddirectories"
+        echo "Loop:"
+        for d in ${changeddirectories[@]}; do
+          echo $d
+        done
