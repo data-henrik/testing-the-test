@@ -7,11 +7,15 @@ spec:
   results:
     - name: changed_directories
       description: list of changed directories
+    - name: is_app
+      description: changed files belong to app
+    - name: is_toolchain
+      description: changed files belong to toolchain
   workspaces:
     - name: task-workspace
       mountPath: /working
   params:
-    - name: script
+    - name: toolchain_dir
   steps:
     - name: execute-script
       image: ibmcom/pipeline-base-image:2.9
@@ -21,14 +25,14 @@ spec:
         - secretRef:
             name: secure-properties
       env:
-        - name: script
-          value: $(params.script)
+        - name: toolchain_dir
+          value: $(params.toolchain_dir)
       command: ["/bin/bash", "-c"]
       args:
         - |
           # verify all the required variables are set
           set -u
-          for e in GIT_REPO GIT_BRANCH REGISTRY_REGION_ID REGISTRY_NAMESPACE  IMAGE_NAME TARGET_REGION_ID TARGET_RESOURCE_GROUP COS_PLAN APP_ID_PLAN CLOUDANT_PLAN script; do
+          for e in GIT_REPO GIT_BRANCH REGISTRY_REGION_ID REGISTRY_NAMESPACE  IMAGE_NAME TARGET_REGION_ID TARGET_RESOURCE_GROUP COS_PLAN APP_ID_PLAN CLOUDANT_PLAN; do
             eval "echo $e="'$'$e
           done
           set +u
@@ -49,6 +53,9 @@ spec:
            echo $d
           done
           echo $changed_directories | tee $(results.changed_directories.path)
+          if [[ " ${changed_directories[@]} " =~ " ${toolchain_dir} " ]]; then
+            echo "true" | tee $(results.is_toolchain.path)
+          fi
 ---
 apiVersion: tekton.dev/v1beta1
 kind: Task
@@ -75,3 +82,4 @@ spec:
         for d in ${changeddirectories[@]}; do
           echo $d
         done
+        which git

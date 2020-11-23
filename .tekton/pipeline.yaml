@@ -16,13 +16,15 @@ spec:
       params:
         - name: script
           value: $(params.script)
+        - name: toolchain_dir
+          value: ".tekton"
       taskRef:
         name: detect-change-task
     - name: test-output
       when: 
-      - input: one
+      - input: "$(tasks.script.results.is_toolchain)"
         operator: in
-        values: "$(tasks.script.results.changed_directories[*])"
+        values: ["true"]
       workspaces:
         - name: task-workspace
           workspace: pipeline-workspace
