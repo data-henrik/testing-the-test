@@ -17,7 +17,7 @@ spec:
         - name: app-dirs
           value: "one two"
         - name: generic-dirs
-          value: [{n:micro1, p:"one,two"},{n:micro2, p:".tekton, .bluemix"}]
+          value: mapfile.txt
       taskRef:
         name: detect-change-task
     - name: test-output

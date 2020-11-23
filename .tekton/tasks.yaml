@@ -29,6 +29,8 @@ spec:
           value: $(params.toolchain-dirs)
         - name: appdirs
           value: $(params.app-dirs)
+        - name: genericdirs
+          value: $(params.generic-dirs)
       command: ["/bin/bash", "-c"]
       args:
         - |
