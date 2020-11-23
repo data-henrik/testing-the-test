@@ -54,7 +54,7 @@ spec:
           done
           echo $changed_directories | tee $(results.changed_directories.path)
           if [[ " ${changed_directories[@]} " =~ " ${toolchaindir} " ]]; then
-            echo "true" | tee $(results.is_toolchain.path)
+            printf true | tee $(results.is_toolchain.path)
           fi
 ---
 apiVersion: tekton.dev/v1beta1
