@@ -16,6 +16,7 @@ spec:
     - name: toolchain-dirs
     - name: app-dirs
     - name: generic-dirs
+      type: array
   steps:
     - name: execute-script
       image: ibmcom/pipeline-base-image:2.9
