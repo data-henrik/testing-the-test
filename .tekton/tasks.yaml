@@ -46,7 +46,7 @@ spec:
           changed_directories=$(git log --format= -n 1 --name-only | grep / | awk 'BEGIN {FS="/"} {print $1}' | uniq)
           echo "changed_directories:\n$changed_directories"
           for d in ${changed_directories[@]}; do
-            echo "yes" | tee $(results.${d}.path)
+           echo $d
           done
           echo $changed_directories | tee $(results.changed_directories.path)
 ---
