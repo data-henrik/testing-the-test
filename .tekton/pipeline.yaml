@@ -21,7 +21,7 @@ spec:
     - name: test-output
       when: 
       - input: ".tekton"
-        operator: in
+        operator: notin
         values: ["$(tasks.script.results.changed_directories)"]
       workspaces:
         - name: task-workspace
