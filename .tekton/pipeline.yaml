@@ -14,9 +14,7 @@ spec:
         - name: task-workspace
           workspace: pipeline-workspace
       params:
-        - name: script
-          value: $(params.script)
-        - name: toolchain_dir
+        - name: toolchain-dir
           value: ".tekton"
       taskRef:
         name: detect-change-task

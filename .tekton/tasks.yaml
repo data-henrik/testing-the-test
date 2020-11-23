@@ -15,7 +15,7 @@ spec:
     - name: task-workspace
       mountPath: /working
   params:
-    - name: toolchain_dir
+    - name: toolchain-dir
   steps:
     - name: execute-script
       image: ibmcom/pipeline-base-image:2.9
@@ -25,8 +25,8 @@ spec:
         - secretRef:
             name: secure-properties
       env:
-        - name: toolchain_dir
-          value: $(params.toolchain_dir)
+        - name: toolchaindir
+          value: $(params.toolchain-dir)
       command: ["/bin/bash", "-c"]
       args:
         - |
@@ -53,7 +53,7 @@ spec:
            echo $d
           done
           echo $changed_directories | tee $(results.changed_directories.path)
-          if [[ " ${changed_directories[@]} " =~ " ${toolchain_dir} " ]]; then
+          if [[ " ${changed_directories[@]} " =~ " ${toolchaindir} " ]]; then
             echo "true" | tee $(results.is_toolchain.path)
           fi
 ---
