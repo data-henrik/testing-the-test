@@ -17,11 +17,11 @@ spec:
         - name: app-dirs
           value: "one two"
         - name: generic-dirs
-          value:
-            - pname: micro1
-              paths: one two
-            - pname: micro2
-              paths: tekton bluemix
+          value: 
+          - pname: micro1
+            paths: one two
+          - pname: micro2
+            paths: tekton bluemix
       taskRef:
         name: detect-change-task
     - name: test-output
