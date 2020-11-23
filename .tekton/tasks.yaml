@@ -52,7 +52,7 @@ spec:
           done
           # check if it is app-related
           echo "app?"
-          #printf false | tee $(results.is_app.path)
+          printf false | tee $(results.is_app.path)
           for d in ${appdirs[@]}; do
             if [[ " ${changed_directories[@]} " =~ "${d}" ]]; then
               printf true | tee $(results.is_app.path)
