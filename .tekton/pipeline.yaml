@@ -17,9 +17,7 @@ spec:
         - name: app-dirs
           value: "one two"
         - name: generic-dirs
-          value: 
-          - pname: micro1
-          - pname: micro2
+          value: micro1, micro2
       taskRef:
         name: detect-change-task
     - name: test-output
