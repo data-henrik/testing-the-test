@@ -13,7 +13,7 @@ spec:
           workspace: pipeline-workspace
       params:
         - name: toolchain-dir
-          value: ".tekton"
+          value: ".tekton .bluemix scripts"
         - name: app-dir
           value: "one"
       taskRef:

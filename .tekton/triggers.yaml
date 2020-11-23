@@ -36,8 +36,6 @@ kind: TriggerTemplate
 metadata:
   name: tt-common
 spec:
-  params:
-    - name: script
   resourcetemplates:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun

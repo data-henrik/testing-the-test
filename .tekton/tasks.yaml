@@ -24,7 +24,7 @@ spec:
         - secretRef:
             name: secure-properties
       env:
-        - name: toolchaindir
+        - name: toolchaindirs
           value: $(params.toolchain-dir)
         - name: appdir
           value: $(params.app-dir)
@@ -32,11 +32,6 @@ spec:
       args:
         - |
           cd /working
-          # Builder type: Container Registry, initializes this default
-          export ARCHIVE_DIR=.
-          # Builder type: Kubernetes expects the ibmcloud cli to be connected to the cluster and the
-          # environment exported below.  The ibmcloud cli region could be initialized to the toolchain
-          # region instead of the kubernets cluster region
           if [ -z $GIT_BRANCH ]; then
             git clone -q $GIT_REPO .
           else
@@ -44,11 +39,13 @@ spec:
           fi
           changed_directories=$(git log --format= -n 1 --name-only | grep / | awk 'BEGIN {FS="/"} {print $1}' | uniq)
           echo "changed_directories:\n$changed_directories"
-          if [[ " ${changed_directories[@]} " =~ "${toolchaindir}" ]]; then
-            printf true | tee $(results.is_toolchain.path)
-          else
-            printf false | tee $(results.is_toolchain.path)
-          fi
+          printf false | tee $(results.is_toolchain.path)
+          for d in ${toolchaindirs[@]}; do
+            if [[ " ${changed_directories[@]} " =~ "${d}" ]]; then
+              printf true | tee $(results.is_toolchain.path)
+              break
+            fi
+          done
           if [[ " ${changed_directories[@]} " =~ "${appdir}" ]]; then
             printf true | tee $(results.is_app.path)
           else
