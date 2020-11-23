@@ -18,12 +18,10 @@ spec:
           value: "one two"
         - name: generic-dirs
           value:
-            -
-              name: micro1
+            - pname: micro1
               paths: one two
-            -
-              name: micro2
-              paths: .tekton .bluemix
+            - pname: micro2
+              paths: tekton bluemix
       taskRef:
         name: detect-change-task
     - name: test-output
