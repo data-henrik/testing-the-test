@@ -30,8 +30,6 @@ spec:
       value: getting-started
     - name: gitrepositoryurl
       value: "https://github.com/$(body.repository.full_name)"
-    - name: script
-      value: ./scripts/pipeline-BUILD.sh
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerTemplate
@@ -51,6 +49,3 @@ spec:
         workspaces:
           - name: pipeline-workspace
             emptyDir: {}
-        params:
-          - name: script
-            value: $(params.script)
