@@ -14,6 +14,7 @@ spec:
       mountPath: /working
   params:
     - name: toolchain-dir
+    - name: app-dir
   steps:
     - name: execute-script
       image: ibmcom/pipeline-base-image:2.9
@@ -25,6 +26,8 @@ spec:
       env:
         - name: toolchaindir
           value: $(params.toolchain-dir)
+        - name: appdir
+          value: $(params.app-dir)
       command: ["/bin/bash", "-c"]
       args:
         - |
