@@ -19,7 +19,10 @@ spec:
       taskRef:
         name: detect-change-task
     - name: test-output
-      runAfter: 
+      when: 
+      - input: "$(tasks.script.results.changed_directories)"
+        operator: in
+        values: [".tekton"]
       workspaces:
         - name: task-workspace
           workspace: pipeline-workspace
