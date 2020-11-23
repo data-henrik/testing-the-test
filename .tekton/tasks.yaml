@@ -5,8 +5,6 @@ metadata:
   name: detect-change-task
 spec:
   results:
-    - name: changed_directories
-      description: list of changed directories
     - name: is_app
       description: changed files belong to app
     - name: is_toolchain
@@ -49,9 +47,6 @@ spec:
           fi
           changed_directories=$(git log --format= -n 1 --name-only | grep / | awk 'BEGIN {FS="/"} {print $1}' | uniq)
           echo "changed_directories:\n$changed_directories"
-          for d in ${changed_directories[@]}; do
-           printf $d | tee -a $(results.changed_directories.path)
-          done
           if [[ " ${changed_directories[@]} " =~ " ${toolchaindir} " ]]; then
             printf true | tee $(results.is_toolchain.path)
           fi
@@ -64,14 +59,12 @@ spec:
   workspaces:
     - name: task-workspace
       mountPath: /working
-  params:
-  - name: changeddirectories
   steps:
     - name: print-changed-paths
       image: ibmcom/pipeline-base-image:2.9
       env:
         - name: changeddirectories
-          value: $(params.changeddirectories)
+          value: "foo bar"
       script: |
         #!/usr/bin/env bash
         env
