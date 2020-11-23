@@ -1,0 +1,30 @@
+# Pipeline
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: pipeline-input-parameter-variable
+spec:
+  workspaces:
+    - name: pipeline-workspace
+  params:
+    - name: script
+  tasks:
+    - name: script
+      workspaces:
+        - name: task-workspace
+          workspace: pipeline-workspace
+      params:
+        - name: script
+          value: $(params.script)
+      taskRef:
+        name: detect-change-task
+    - name: test-output
+      runAfter: 
+      workspaces:
+        - name: task-workspace
+          workspace: pipeline-workspace
+      params:
+        - name: changeddirectories
+          value: "$(tasks.script.results.changed_directories)"
+      taskRef:
+        name: print-changed-paths

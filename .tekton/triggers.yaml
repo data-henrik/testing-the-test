@@ -1,0 +1,56 @@
+# Triggers
+apiVersion: tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: build
+spec:
+  params:
+    - name: gitrevision
+      description: The git revision
+      default: master
+    - name: gitrepositoryurl
+      description: The git repository url
+    - name: namespace
+      description: The namespace to create the resources
+  triggers:
+    - binding:
+        name: pipeline-build
+      template:
+        name: tt-common
+---
+apiVersion: tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: pipeline-build
+spec:
+  params:
+    - name: gitrevision
+      value: $(body.head_commit.id)
+    - name: namespace
+      value: getting-started
+    - name: gitrepositoryurl
+      value: "https://github.com/$(body.repository.full_name)"
+    - name: script
+      value: ./scripts/pipeline-BUILD.sh
+---
+apiVersion: tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: tt-common
+spec:
+  params:
+    - name: script
+  resourcetemplates:
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        name: pipelinerun-$(uid)
+      spec:
+        pipelineRef:
+          name: pipeline-input-parameter-variable
+        workspaces:
+          - name: pipeline-workspace
+            emptyDir: {}
+        params:
+          - name: script
+            value: $(params.script)
