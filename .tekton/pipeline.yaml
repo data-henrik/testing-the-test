@@ -20,7 +20,7 @@ spec:
         name: detect-change-task
     - name: test-output
       when: 
-      - input: "tekton"
+      - input: ".tekton"
         operator: in
         values: ["$(tasks.script.results.changed_directories)"]
       workspaces:
