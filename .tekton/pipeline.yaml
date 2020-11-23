@@ -17,7 +17,7 @@ spec:
         - name: app-dirs
           value: "one two"
         - name: generic-dirs
-          value: micro1, micro2
+          value: {n:micro1, p:one,two}
       taskRef:
         name: detect-change-task
     - name: test-output
