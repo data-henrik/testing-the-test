@@ -16,6 +16,14 @@ spec:
           value: ".tekton .bluemix scripts"
         - name: app-dirs
           value: "one two"
+        - name: generic-dirs
+          value:
+            -
+              name: micro 1
+              paths: one two
+            -
+              name: micro 2
+              paths: .tekton .bluemix
       taskRef:
         name: detect-change-task
     - name: test-output
