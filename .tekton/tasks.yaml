@@ -13,8 +13,8 @@ spec:
     - name: task-workspace
       mountPath: /working
   params:
-    - name: toolchain-dir
-    - name: app-dir
+    - name: toolchain-dirs
+    - name: app-dirs
   steps:
     - name: execute-script
       image: ibmcom/pipeline-base-image:2.9
@@ -25,20 +25,24 @@ spec:
             name: secure-properties
       env:
         - name: toolchaindirs
-          value: $(params.toolchain-dir)
-        - name: appdir
-          value: $(params.app-dir)
+          value: $(params.toolchain-dirs)
+        - name: appdirs
+          value: $(params.app-dirs)
       command: ["/bin/bash", "-c"]
       args:
         - |
           cd /working
+          # get the right repo and branch
           if [ -z $GIT_BRANCH ]; then
             git clone -q $GIT_REPO .
           else
             git clone -q -b $GIT_BRANCH $GIT_REPO .
           fi
+          # check for changed directories
           changed_directories=$(git log --format= -n 1 --name-only | grep / | awk 'BEGIN {FS="/"} {print $1}' | uniq)
-          echo "changed_directories:\n$changed_directories"
+          #echo "changed_directories:\n$changed_directories"
+          # check if it is toolchain-related
+          echo "toolchain?"
           printf false | tee $(results.is_toolchain.path)
           for d in ${toolchaindirs[@]}; do
             if [[ " ${changed_directories[@]} " =~ "${d}" ]]; then
@@ -46,11 +50,15 @@ spec:
               break
             fi
           done
-          if [[ " ${changed_directories[@]} " =~ "${appdir}" ]]; then
-            printf true | tee $(results.is_app.path)
-          else
-            printf false | tee $(results.is_app.path)
-          fi
+          # check if it is app-related
+          echo "app?"
+          #printf false | tee $(results.is_app.path)
+          for d in ${appdirs[@]}; do
+            if [[ " ${changed_directories[@]} " =~ "${d}" ]]; then
+              printf true | tee $(results.is_app.path)
+              break
+            fi
+          done
 
 ---
 apiVersion: tekton.dev/v1beta1

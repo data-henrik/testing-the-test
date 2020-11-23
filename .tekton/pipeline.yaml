@@ -12,10 +12,10 @@ spec:
         - name: task-workspace
           workspace: pipeline-workspace
       params:
-        - name: toolchain-dir
+        - name: toolchain-dirs
           value: ".tekton .bluemix scripts"
-        - name: app-dir
-          value: "one"
+        - name: app-dirs
+          value: "one two"
       taskRef:
         name: detect-change-task
     - name: test-output
