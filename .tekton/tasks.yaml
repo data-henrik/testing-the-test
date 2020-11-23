@@ -16,7 +16,6 @@ spec:
     - name: toolchain-dirs
     - name: app-dirs
     - name: generic-dirs
-      type: array
   steps:
     - name: execute-script
       image: ibmcom/pipeline-base-image:2.9
@@ -31,7 +30,7 @@ spec:
         - name: appdirs
           value: $(params.app-dirs)
         - name: genericdirs
-          value: $(params.generic-dirs[*])
+          value: $(params.generic-dirs)
       command: ["/bin/bash", "-c"]
       args:
         - |
