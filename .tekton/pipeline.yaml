@@ -6,8 +6,6 @@ metadata:
 spec:
   workspaces:
     - name: pipeline-workspace
-  params:
-    - name: script
   tasks:
     - name: script
       workspaces:
@@ -16,6 +14,8 @@ spec:
       params:
         - name: toolchain-dir
           value: ".tekton"
+        - name: app-dir
+          value: "one"
       taskRef:
         name: detect-change-task
     - name: test-output
@@ -27,7 +27,20 @@ spec:
         - name: task-workspace
           workspace: pipeline-workspace
       params:
-        - name: changeddirectories
-          value: "$(tasks.script.results.changed_directories)"
+        - name: mystring
+          value: "Hello toolchain"
+      taskRef:
+        name: print-changed-paths
+    - name: test-output2
+      when: 
+      - input: "$(tasks.script.results.is_toolchain)"
+        operator: in
+        values: ["true"]
+      workspaces:
+        - name: task-workspace
+          workspace: pipeline-workspace
+      params:
+        - name: mystring
+          value: "Hello app"
       taskRef:
         name: print-changed-paths

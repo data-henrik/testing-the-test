@@ -49,7 +49,15 @@ spec:
           echo "changed_directories:\n$changed_directories"
           if [[ " ${changed_directories[@]} " =~ " ${toolchaindir} " ]]; then
             printf true | tee $(results.is_toolchain.path)
+          else
+            printf false | tee $(results.is_toolchain.path)
           fi
+          if [[ " ${changed_directories[@]} " =~ " ${appdir} " ]]; then
+            printf true | tee $(results.is_app.path)
+          else
+            printf false | tee $(results.is_app.path)
+          fi
+
 ---
 apiVersion: tekton.dev/v1beta1
 kind: Task
@@ -59,18 +67,15 @@ spec:
   workspaces:
     - name: task-workspace
       mountPath: /working
+  params:
+    - name: mystring
   steps:
     - name: print-changed-paths
-      image: ibmcom/pipeline-base-image:2.9
+      image: bash:latest
       env:
-        - name: changeddirectories
-          value: "foo bar"
+        - name: mystring
+          value: $(params.mystring)
       script: |
         #!/usr/bin/env bash
         env
-        echo "This is another step. Changed directories:"
-        echo "Directories: $changeddirectories"
-        echo "Loop:"
-        for d in ${changeddirectories[@]}; do
-          echo $d
-        done
+        echo "mystring=$mystring"
