@@ -45,7 +45,7 @@ spec:
           changed_directories=$(git log --format= -n 1 --name-only | grep / | awk 'BEGIN {FS="/"} {print $1}' | uniq)
           #echo "changed_directories:\n$changed_directories"
           # check if it is toolchain-related
-          echo "toolchain?"
+          echo "toolchain?\n"
           printf false | tee $(results.is_toolchain.path)
           for d in ${toolchaindirs[@]}; do
             if [[ " ${changed_directories[@]} " =~ "${d}" ]]; then
@@ -54,7 +54,7 @@ spec:
             fi
           done
           # check if it is app-related
-          echo "app?"
+          echo "app?\n"
           printf false | tee $(results.is_app.path)
           for d in ${appdirs[@]}; do
             if [[ " ${changed_directories[@]} " =~ "${d}" ]]; then

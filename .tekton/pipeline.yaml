@@ -15,9 +15,11 @@ spec:
         - name: toolchain-dirs
           value: ".tekton .bluemix scripts"
         - name: app-dirs
-          value: "one two"
+          value: one two
         - name: generic-dirs
-          value: mapfile.txt
+          value:
+            - one
+            - two
       taskRef:
         name: detect-change-task
     - name: test-output
