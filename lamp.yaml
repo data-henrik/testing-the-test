@@ -31,9 +31,9 @@
     notify:
     - restart nginx
   - name: execute init.bash
-    ansible.builtin.script: ./init.bash
-  - name: upload execute uploaded.sh
-    script: ./uploaded.sh
+    ansible.builtin.script: init.bash
+  - name: execute uploaded.sh
+    ansible.builtin.script: uploaded.sh
   handlers:
     - name: restart nginx
       service:
