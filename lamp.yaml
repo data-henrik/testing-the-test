@@ -30,15 +30,8 @@
       state: latest
     notify:
     - restart nginx
-  - name: upload the init script
-    ansible.builtin.copy:
-      src: init.bash
-      dest: /root/init.bash
-      owner: root
-      group: root
-      mode: '0700'
   - name: execute init.bash
-    script: /root/init.bash
+    ansible.builtin.script: ./init.bash
   - name: upload execute uploaded.sh
     script: ./uploaded.sh
   handlers:
